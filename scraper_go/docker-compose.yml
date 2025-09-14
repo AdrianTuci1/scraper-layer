@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  scraper-go:
+    build: .
+    container_name: scraper-go
+    environment:
+      - AWS_REGION=${AWS_REGION:-us-east-1}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - SQS_QUEUE_URL=${SQS_QUEUE_URL}
+      - S3_BUCKET_NAME=${S3_BUCKET_NAME}
+      - NODE_API_URL=${NODE_API_URL}
+      - API_KEY=${API_KEY}
+      - MAX_CONCURRENT_JOBS=${MAX_CONCURRENT_JOBS:-100}
+      - WORKER_POOL_SIZE=${WORKER_POOL_SIZE:-10}
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+      - LOG_FORMAT=${LOG_FORMAT:-json}
+      - USE_PROXY_ROTATION=${USE_PROXY_ROTATION:-false}
+      - MAX_RETRIES=${MAX_RETRIES:-3}
+      - RETRY_DELAY=${RETRY_DELAY:-5s}
+    volumes:
+      - ./logs:/app/logs
+    restart: unless-stopped
+    networks:
+      - scraper-network
+
+networks:
+  scraper-network:
+    driver: bridge

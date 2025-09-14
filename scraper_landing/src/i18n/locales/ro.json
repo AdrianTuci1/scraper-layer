@@ -1,0 +1,334 @@
+{
+  "navigation": {
+    "home": "Acasă",
+    "pricing": "Prețuri",
+    "documentation": "Documentație",
+    "about": "Despre Noi",
+    "login": "Autentificare",
+    "getStarted": "Începe Gratuit"
+  },
+  "hero": {
+    "title": "Colectare inteligentă de date la scară",
+    "subtitle": "Transformă orice website într-o sursă de date structurate cu API-ul nostru de scraping asincron. Scalabil, rapid și fiabil pentru afacerile moderne.",
+    "getStarted": "Începe Gratuit",
+    "requestDemo": "Solicită o Demonstrație"
+  },
+  "language": {
+    "switch": "Schimbă Limba",
+    "english": "English",
+    "romanian": "Română"
+  },
+  "problemsSolutions": {
+    "title": "Problemele Scraping-ului Tradițional",
+    "subtitle": "Știm că scraping-ul poate fi complicat. Iată cum rezolvăm problemele comune.",
+    "problem": "Problemă",
+    "solution": "Soluția Noastră",
+    "items": [
+      {
+        "title": "Blocarea IP-urilor",
+        "description": "Website-urile detectează și blochează IP-urile care fac prea multe cereri",
+        "solution": "Rotirea automată a IP-urilor și distribuția geografică a cererilor"
+      },
+      {
+        "title": "Complexitatea Tehnică",
+        "description": "Implementarea unui sistem de scraping robust necesită resurse tehnice mari",
+        "solution": "API simplu cu documentație completă și exemple de cod"
+      },
+      {
+        "title": "Scalabilitate Limită",
+        "description": "Soluțiile tradiționale nu pot gestiona volume mari de date",
+        "solution": "Arhitectură cloud care suportă milioane de cereri simultane"
+      },
+      {
+        "title": "Mentenanță Constantă",
+        "description": "Website-urile se schimbă și necesită actualizări frecvente",
+        "solution": "Monitorizare automată și adaptare la schimbările de structură"
+      }
+    ]
+  },
+  "features": {
+    "title": "Caracteristici Cheie",
+    "subtitle": "Tot ce ai nevoie pentru a extrage date web la scară industrială",
+    "items": [
+      {
+        "title": "Scraping Asincron",
+        "description": "Procesează sute de cereri simultan fără să blocheze sistemul",
+        "icon": "⚡"
+      },
+      {
+        "title": "Date Structurate",
+        "description": "Rezultatele sunt livrate în format JSON standardizat",
+        "icon": "📊"
+      },
+      {
+        "title": "Scalabilitate Masivă",
+        "description": "Suportă milioane de cereri cu infrastructură cloud robustă",
+        "icon": "🚀"
+      },
+      {
+        "title": "API Simplu",
+        "description": "Integrare rapidă cu documentație completă și exemple",
+        "icon": "🔧"
+      },
+      {
+        "title": "Monitorizare Real-time",
+        "description": "Dashboard pentru urmărirea progresului și statistici",
+        "icon": "📈"
+      },
+      {
+        "title": "Suport 24/7",
+        "description": "Echipa noastră este disponibilă oricând ai nevoie de ajutor",
+        "icon": "🛟"
+      }
+    ]
+  },
+  "useCases": {
+    "title": "Cazuri de Utilizare",
+    "subtitle": "Vezi cum diferite industrii folosesc serviciul nostru pentru a-și îmbunătăți afacerea",
+    "items": [
+      {
+        "title": "E-commerce",
+        "subtitle": "Monitorizează prețurile concurenței",
+        "description": "Urmărește prețurile produselor de la concurenți în timp real și optimizează strategia de prețuri.",
+        "features": ["Monitorizare prețuri", "Alertă schimbări", "Analiză tendințe", "Raportare automată"],
+        "icon": "🛒"
+      },
+      {
+        "title": "Marketing & SEO",
+        "subtitle": "Colectează date pentru analiza cuvintelor cheie",
+        "description": "Extrage date despre poziționarea în motoarele de căutare și analizează performanța SEO.",
+        "features": ["Analiză SEO", "Monitorizare poziții", "Raportare cuvinte cheie", "Benchmarking"],
+        "icon": "📈"
+      },
+      {
+        "title": "Firme de Investiții",
+        "subtitle": "Extrage date financiare pentru analize de piață",
+        "description": "Colectează date financiare, rapoarte și indicatori pentru analize de investiții și risc.",
+        "features": ["Date financiare", "Rapoarte trimestriale", "Indicatori de piață", "Analiză risc"],
+        "icon": "💰"
+      }
+    ]
+  },
+  "pricing": {
+    "title": "Prețuri Simple și Transparente",
+    "subtitle": "Alege planul care se potrivește nevoilor tale. Poți schimba sau anula oricând.",
+    "mostPopular": "Cel mai popular",
+    "creditsIncluded": "credite incluse",
+    "freeTrial": "Toate planurile includ 14 zile de testare gratuită. Fără costuri ascunse.",
+    "plans": [
+      {
+        "name": "Starter",
+        "description": "Perfect pentru uz personal sau teste",
+        "price": "€29",
+        "period": "/lună",
+        "credits": "10,000",
+        "features": [
+          "10,000 credite pe lună",
+          "API standard",
+          "Suport email",
+          "Documentație completă",
+          "99.9% uptime"
+        ],
+        "cta": "Începe Gratuit"
+      },
+      {
+        "name": "Pro",
+        "description": "Pentru afaceri mici și mijlocii",
+        "price": "€99",
+        "period": "/lună",
+        "credits": "100,000",
+        "features": [
+          "100,000 credite pe lună",
+          "API avansat",
+          "Suport priorititar",
+          "Webhooks",
+          "99.95% uptime",
+          "Analytics avansate"
+        ],
+        "cta": "Alege Pro"
+      },
+      {
+        "name": "Business",
+        "description": "Pentru clienți mari cu nevoi complexe",
+        "price": "€299",
+        "period": "/lună",
+        "credits": "1,000,000",
+        "features": [
+          "1,000,000+ credite pe lună",
+          "API personalizat",
+          "Suport dedicat 24/7",
+          "Integrări personalizate",
+          "99.99% uptime",
+          "SLA garantat",
+          "Manager de cont dedicat"
+        ],
+        "cta": "Contactează-ne"
+      }
+    ]
+  },
+  "documentation": {
+    "title": "Documentație API",
+    "subtitle": "Tot ce ai nevoie pentru a integra API-ul nostru în aplicația ta",
+    "codeExamples": "Exemple de Cod",
+    "sections": [
+      {
+        "title": "Introducere",
+        "description": "Începe rapid cu API-ul nostru",
+        "items": [
+          "Primii pași",
+          "Autentificare",
+          "Rate limiting",
+          "Formatul răspunsurilor"
+        ]
+      },
+      {
+        "title": "Endpoint-uri API",
+        "description": "Toate endpoint-urile disponibile",
+        "items": [
+          "POST /scrape - Creare job de scraping",
+          "GET /jobs/{id} - Status job",
+          "GET /jobs - Lista job-urilor",
+          "DELETE /jobs/{id} - Ștergere job"
+        ]
+      },
+      {
+        "title": "Exemple de Cod",
+        "description": "Implementări în limbaje populare",
+        "items": [
+          "Node.js",
+          "Python",
+          "Golang",
+          "cURL"
+        ]
+      },
+      {
+        "title": "Ghiduri Pas cu Pas",
+        "description": "Tutoriale detaliate",
+        "items": [
+          "Scraping produse e-commerce",
+          "Extragere date SEO",
+          "Monitorizare prețuri",
+          "Webhooks și notificări"
+        ]
+      },
+      {
+        "title": "Coduri de Eroare",
+        "description": "Ghid pentru debugging",
+        "items": [
+          "Erori de autentificare",
+          "Erori de validare",
+          "Erori de rate limiting",
+          "Erori de scraping"
+        ]
+      },
+      {
+        "title": "SDK-uri",
+        "description": "Librării oficiale",
+        "items": [
+          "JavaScript/TypeScript",
+          "Python",
+          "Go",
+          "PHP"
+        ]
+      }
+    ]
+  },
+  "about": {
+    "title": "Despre Noi",
+    "subtitle": "Suntem o echipă de dezvoltatori pasionați care vrem să democratizăm accesul la datele web.",
+    "story": {
+      "title": "Povestea Noastră",
+      "description1": "Totul a început când am încercat să construim un sistem de monitorizare prețuri pentru un client. Am realizat rapid că scraping-ul web este o provocare tehnică complexă care necesită resurse substanțiale și cunoștințe specializate.",
+      "description2": "Am văzut că multe companii se confruntă cu aceleași probleme: IP-uri blocate, sisteme care nu scalează, mentenanță constantă. Am decis să construim o soluție care să rezolve toate aceste probleme într-un singur API simplu și puternic."
+    },
+    "vision": {
+      "title": "Viziunea Noastră",
+      "description": "Vrem ca orice dezvoltator sau companie să poată accesa datele web de care are nevoie, fără să se îngrijoreze de complexitatea tehnică din spate. Datele web ar trebui să fie la fel de ușor de accesat ca orice alt API."
+    },
+    "values": {
+      "title": "Valorile Noastre",
+      "items": [
+        {
+          "title": "Simplitate",
+          "description": "Credem că tehnologia complexă trebuie să fie simplă de folosit. API-ul nostru este intuitiv și bine documentat."
+        },
+        {
+          "title": "Fiabilitate",
+          "description": "Infrastructura noastră este construită pentru a funcționa 24/7. Uptime de 99.9%+ și suport dedicat."
+        },
+        {
+          "title": "Scalabilitate",
+          "description": "Sistemul nostru crește odată cu nevoile tale. De la teste mici la milioane de cereri zilnic."
+        },
+        {
+          "title": "Transparență",
+          "description": "Prețuri clare, documentație completă și comunicare deschisă. Fără surprize, fără costuri ascunse."
+        }
+      ]
+    },
+    "team": {
+      "title": "Echipa Noastră",
+      "members": [
+        {
+          "name": "Alexandru Popescu",
+          "role": "CEO & Founder",
+          "description": "10+ ani experiență în dezvoltare web și arhitectură cloud. A condus echipe la companii tech din România și străinătate.",
+          "image": "👨‍💼"
+        },
+        {
+          "name": "Maria Ionescu",
+          "role": "CTO",
+          "description": "Expert în sisteme distribuite și microservicii. A lucrat la scale-up-uri din Silicon Valley și aduce experiența internațională.",
+          "image": "👩‍💻"
+        },
+        {
+          "name": "Andrei Dumitrescu",
+          "role": "Lead Developer",
+          "description": "Specialist în Go și arhitecturi high-performance. A dezvoltat sisteme care procesează milioane de cereri zilnic.",
+          "image": "👨‍🔧"
+        }
+      ]
+    },
+    "cta": {
+      "title": "Vrei să lucrezi cu noi?",
+      "subtitle": "Cautăm dezvoltatori pasionați care vor să construiască viitorul datelor web.",
+      "button": "Vezi pozițiile disponibile"
+    }
+  },
+  "footer": {
+    "description": "API-ul de scraping web cel mai simplu și mai fiabil. Transformă orice website într-o sursă de date structurate în câteva minute.",
+    "copyright": "© 2024 ScraperLayer. Toate drepturile rezervate.",
+    "sections": {
+      "product": "Produs",
+      "company": "Companie",
+      "support": "Suport",
+      "legal": "Legal"
+    },
+    "links": {
+      "product": [
+        { "name": "Prețuri", "href": "/pricing" },
+        { "name": "Documentație", "href": "/documentation" },
+        { "name": "API Status", "href": "#" },
+        { "name": "Changelog", "href": "#" }
+      ],
+      "company": [
+        { "name": "Despre Noi", "href": "/about" },
+        { "name": "Blog", "href": "#" },
+        { "name": "Cariere", "href": "#" },
+        { "name": "Contact", "href": "#" }
+      ],
+      "support": [
+        { "name": "Centrul de Ajutor", "href": "#" },
+        { "name": "Comunitate", "href": "#" },
+        { "name": "Status", "href": "#" },
+        { "name": "Securitate", "href": "#" }
+      ],
+      "legal": [
+        { "name": "Termeni și Condiții", "href": "#" },
+        { "name": "Politica de Confidențialitate", "href": "#" },
+        { "name": "Cookie Policy", "href": "#" },
+        { "name": "GDPR", "href": "#" }
+      ]
+    }
+  }
+}
