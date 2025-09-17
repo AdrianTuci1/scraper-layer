@@ -181,8 +181,13 @@ func (jp *JobProcessor) processJob(workerID int, job *models.TaskMessage) {
 		result.Duration = time.Since(startTime).Milliseconds()
 		result.Cost = jp.calculateCost(job, true)
 
-		// Upload to S3
-		s3Location, err := jp.s3Uploader.UploadResult(result)
+		// Upload to S3 with specified format
+		outputFormat := job.Options.OutputFormat
+		if outputFormat == "" {
+			outputFormat = jp.config.DefaultOutputFormat
+		}
+		
+		s3Location, err := jp.s3Uploader.UploadResult(result, outputFormat)
 		if err != nil {
 			jp.logger.WithError(err).WithField("task_id", job.TaskID).Error("Failed to upload result to S3")
 			result.Error = fmt.Sprintf("Failed to upload to S3: %v", err)

@@ -20,17 +20,17 @@ export function Pricing() {
     <div className="py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+          <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
             {t('pricing.title')}
           </h2>
-          <p className="mt-6 text-lg leading-8 text-gray-600">
+          <p className="mt-6 text-lg leading-8 text-gray-300">
             {t('pricing.subtitle')}
           </p>
         </div>
         
         <div className="mx-auto mt-16 grid max-w-lg grid-cols-1 gap-y-6 sm:mt-20 lg:max-w-none lg:grid-cols-3">
           {plans.map((plan) => (
-            <Card key={plan.name} className={`relative ${plan.popular ? 'ring-2 ring-blue-600' : ''}`}>
+            <Card key={plan.name} className={`relative ${plan.popular ? 'ring-2 ring-blue-400' : ''}`}>
               {plan.popular && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                   <Badge className="bg-blue-600">{t('pricing.mostPopular')}</Badge>
@@ -40,10 +40,10 @@ export function Pricing() {
                 <CardTitle className="text-2xl">{plan.name}</CardTitle>
                 <CardDescription className="text-base">{plan.description}</CardDescription>
                 <div className="mt-4">
-                  <span className="text-4xl font-bold text-gray-900">{plan.price}</span>
-                  <span className="text-lg text-gray-600">{plan.period}</span>
+                  <span className="text-4xl font-bold text-white">{plan.price}</span>
+                  <span className="text-lg text-gray-300">{plan.period}</span>
                 </div>
-                <div className="text-sm text-gray-500">
+                <div className="text-sm text-gray-400">
                   {plan.credits} {t('pricing.creditsIncluded')}
                 </div>
               </CardHeader>
@@ -54,7 +54,7 @@ export function Pricing() {
                       <svg className="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                       </svg>
-                      <span className="text-sm text-gray-600">{feature}</span>
+                      <span className="text-sm text-gray-300">{feature}</span>
                     </li>
                   ))}
                 </ul>
@@ -70,7 +70,7 @@ export function Pricing() {
         </div>
         
         <div className="mt-16 text-center">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-gray-300">
             {t('pricing.freeTrial')}
           </p>
         </div>

@@ -12,6 +12,7 @@ const { authenticateRequest } = require('./utils/auth');
 // Import route handlers
 const jobsRoutes = require('./routes/jobs');
 const pipelinesRoutes = require('./routes/pipelines');
+const dataflowRoutes = require('./routes/dataflow');
 const downloadRoutes = require('./routes/download');
 const callbackRoutes = require('./routes/callback');
 
@@ -92,6 +93,13 @@ app.get('/api', (req, res) => {
         'GET /api/v1/pipelines': 'List user pipelines',
         'GET /api/v1/pipelines/:pipelineId': 'Get pipeline details',
       },
+      dataflow: {
+        'POST /api/v1/dataflow/pipelines': 'Create a new data flow pipeline',
+        'GET /api/v1/dataflow/pipelines': 'List data flow pipelines',
+        'GET /api/v1/dataflow/pipelines/:id': 'Get data flow pipeline details',
+        'POST /api/v1/dataflow/pipelines/:id/execute': 'Execute data flow pipeline',
+        'GET /api/v1/dataflow/templates': 'Get available templates',
+      },
       callback: {
         'POST /api/v1/jobs/:jobId/callback': 'Worker callback endpoint',
       },
@@ -130,6 +138,7 @@ const authenticate = (req, res, next) => {
 // API routes with authentication
 app.use('/api/v1/jobs', authenticate, jobsRoutes);
 app.use('/api/v1/pipelines', authenticate, pipelinesRoutes);
+app.use('/api/v1/dataflow', authenticate, dataflowRoutes);
 app.use('/api/v1/jobs', authenticate, downloadRoutes);
 
 // Callback routes (no authentication required - used by Golang workers)

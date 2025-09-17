@@ -16,6 +16,9 @@ The service consists of several key components:
 
 - **Concurrent Processing**: Uses goroutine pools for efficient task processing
 - **Dual Scraping Modes**: HTML-only scraping with Colly and JS rendering with Chrome headless
+- **Multiple Output Formats**: JSON, HTML, XML, Markdown, and CSV support
+- **Anti-bot Measures**: Stealth mode, human behavior simulation, and random delays
+- **CAPTCHA Solving**: Integration with 2captcha and AntiCaptcha services
 - **AWS Integration**: Native SQS, S3, and DynamoDB integration
 - **Error Handling**: Robust retry logic and error reporting
 - **Proxy Support**: Optional proxy rotation for avoiding blocks
@@ -57,6 +60,20 @@ Optional configuration:
 - `PROXY_LIST`: Comma-separated list of proxies
 - `MAX_RETRIES`: Maximum retry attempts (default: 3)
 - `RETRY_DELAY`: Delay between retries (default: 5s)
+
+Output format configuration:
+
+- `DEFAULT_OUTPUT_FORMAT`: Default output format (json, html, xml, md, csv)
+
+Anti-bot and CAPTCHA configuration:
+
+- `DEFAULT_STEALTH_MODE`: Enable stealth mode by default (true/false)
+- `DEFAULT_CAPTCHA_SOLVER`: Default CAPTCHA solver (2captcha, anticaptcha, manual)
+- `DEFAULT_CAPTCHA_API_KEY`: API key for CAPTCHA solving service
+- `DEFAULT_MIN_DELAY`: Minimum delay between actions in seconds (default: 1)
+- `DEFAULT_MAX_DELAY`: Maximum delay between actions in seconds (default: 3)
+- `DEFAULT_VIEWPORT_WIDTH`: Default viewport width (default: 1920)
+- `DEFAULT_VIEWPORT_HEIGHT`: Default viewport height (default: 1080)
 
 ## Building
 
@@ -114,6 +131,8 @@ sudo systemctl start scraper-go
 
 The service expects SQS messages in the following format:
 
+### Basic JSON Output Example
+
 ```json
 {
   "task_id": "unique-task-id",
@@ -145,10 +164,98 @@ The service expects SQS messages in the following format:
     "proxy_url": "http://proxy:port",
     "max_retries": 3,
     "retry_delay": 5,
-    "respect_robots": true
+    "respect_robots": true,
+    "output_format": "json"
   },
   "callback_url": "https://your-api.com/callback",
   "created_at": "2023-01-01T00:00:00Z"
+}
+```
+
+### Markdown Output Example (Ideal for LLMs)
+
+```json
+{
+  "task_id": "llm-task-123",
+  "url": "https://news-site.com/article",
+  "schema": {
+    "title": {
+      "selector": "h1.article-title",
+      "type": "text"
+    },
+    "content": {
+      "selector": ".article-content",
+      "type": "text"
+    },
+    "author": {
+      "selector": ".author-name",
+      "type": "text"
+    }
+  },
+  "options": {
+    "enable_js": true,
+    "output_format": "md",
+    "stealth_mode": true,
+    "human_behavior": true
+  }
+}
+```
+
+### Stealth Mode with CAPTCHA Solving
+
+```json
+{
+  "task_id": "stealth-task-456",
+  "url": "https://protected-site.com",
+  "schema": {
+    "data": {
+      "selector": ".protected-content",
+      "type": "text"
+    }
+  },
+  "options": {
+    "enable_js": true,
+    "stealth_mode": true,
+    "captcha_solver": "2captcha",
+    "captcha_api_key": "your-2captcha-api-key",
+    "human_behavior": true,
+    "random_delay": true,
+    "min_delay": 2,
+    "max_delay": 5,
+    "viewport_width": 1920,
+    "viewport_height": 1080,
+    "output_format": "html"
+  }
+}
+```
+
+### Anti-bot Measures Example
+
+```json
+{
+  "task_id": "anti-bot-task-789",
+  "url": "https://e-commerce-site.com/product",
+  "schema": {
+    "product_name": {
+      "selector": ".product-title",
+      "type": "text"
+    },
+    "price": {
+      "selector": ".price-current",
+      "type": "text"
+    }
+  },
+  "options": {
+    "enable_js": true,
+    "stealth_mode": true,
+    "human_behavior": true,
+    "random_delay": true,
+    "min_delay": 1,
+    "max_delay": 3,
+    "disable_images": true,
+    "disable_css": false,
+    "output_format": "csv"
+  }
 }
 ```
 

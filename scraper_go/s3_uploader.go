@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -48,32 +49,90 @@ func NewS3Uploader(cfg *config.Config) (*S3Uploader, error) {
 	}, nil
 }
 
-// UploadResult uploads a scraping result to S3
-func (u *S3Uploader) UploadResult(result *models.ScrapingResult) (string, error) {
-	u.logger.WithField("task_id", result.TaskID).Debug("Uploading result to S3")
+// UploadResult uploads a scraping result to S3 in the specified format
+func (u *S3Uploader) UploadResult(result *models.ScrapingResult, outputFormat string) (string, error) {
+	u.logger.WithFields(logrus.Fields{
+		"task_id": result.TaskID,
+		"format": outputFormat,
+	}).Debug("Uploading result to S3")
 
-	// Convert result to JSON
-	jsonData, err := result.ToJSON()
-	if err != nil {
-		return "", fmt.Errorf("failed to marshal result to JSON: %w", err)
+	var data []byte
+	var contentType string
+	var fileExtension string
+	var err error
+
+	// Default to JSON if no format specified
+	if outputFormat == "" {
+		outputFormat = "json"
 	}
 
-	// Create S3 key
-	key := fmt.Sprintf("results/%s/%s.json", 
+	switch strings.ToLower(outputFormat) {
+	case "html":
+		htmlData, err := result.ToHTML()
+		if err != nil {
+			return "", fmt.Errorf("failed to convert to HTML: %w", err)
+		}
+		data = []byte(htmlData)
+		contentType = "text/html"
+		fileExtension = "html"
+		
+	case "xml":
+		xmlData, err := result.ToXML()
+		if err != nil {
+			return "", fmt.Errorf("failed to convert to XML: %w", err)
+		}
+		data = []byte(xmlData)
+		contentType = "application/xml"
+		fileExtension = "xml"
+		
+	case "md", "markdown":
+		mdData, err := result.ToMarkdown()
+		if err != nil {
+			return "", fmt.Errorf("failed to convert to Markdown: %w", err)
+		}
+		data = []byte(mdData)
+		contentType = "text/markdown"
+		fileExtension = "md"
+		
+	case "csv":
+		csvData, err := result.ToCSV()
+		if err != nil {
+			return "", fmt.Errorf("failed to convert to CSV: %w", err)
+		}
+		data = []byte(csvData)
+		contentType = "text/csv"
+		fileExtension = "csv"
+		
+	case "json":
+		jsonData, err := result.ToJSON()
+		if err != nil {
+			return "", fmt.Errorf("failed to marshal result to JSON: %w", err)
+		}
+		data = []byte(jsonData)
+		contentType = "application/json"
+		fileExtension = "json"
+		
+	default:
+		return "", fmt.Errorf("unsupported output format: %s", outputFormat)
+	}
+
+	// Create S3 key with appropriate extension
+	key := fmt.Sprintf("results/%s/%s.%s", 
 		time.Now().Format("2006/01/02"), 
-		result.TaskID)
+		result.TaskID, fileExtension)
 
 	// Upload to S3
 	_, err = u.s3Client.PutObject(&s3.PutObjectInput{
 		Bucket:      aws.String(u.bucketName),
 		Key:         aws.String(key),
-		Body:        bytes.NewReader([]byte(jsonData)),
-		ContentType: aws.String("application/json"),
+		Body:        bytes.NewReader(data),
+		ContentType: aws.String(contentType),
 		Metadata: map[string]*string{
-			"task_id":    aws.String(result.TaskID),
-			"url":        aws.String(result.URL),
-			"status":     aws.String(string(result.Status)),
-			"created_at": aws.String(result.Timestamp.Format(time.RFC3339)),
+			"task_id":       aws.String(result.TaskID),
+			"url":           aws.String(result.URL),
+			"status":        aws.String(string(result.Status)),
+			"created_at":    aws.String(result.Timestamp.Format(time.RFC3339)),
+			"output_format": aws.String(outputFormat),
 		},
 	})
 	if err != nil {
@@ -86,6 +145,7 @@ func (u *S3Uploader) UploadResult(result *models.ScrapingResult) (string, error)
 	u.logger.WithFields(logrus.Fields{
 		"task_id": result.TaskID,
 		"s3_url":  s3URL,
+		"format":  outputFormat,
 	}).Info("Result uploaded to S3 successfully")
 
 	return s3URL, nil

@@ -2,6 +2,8 @@ package models
 
 import (
 	"encoding/json"
+	"fmt"
+	"strings"
 	"time"
 )
 
@@ -36,6 +38,26 @@ type ScrapingOptions struct {
 	MaxRetries     int               `json:"max_retries,omitempty"`
 	RetryDelay     int               `json:"retry_delay,omitempty"` // in seconds
 	RespectRobots  bool              `json:"respect_robots,omitempty"`
+	
+	// Output format options
+	OutputFormat   string            `json:"output_format,omitempty"` // json, html, xml, md, csv
+	Template       string            `json:"template,omitempty"`      // template custom pentru output
+	
+	// Anti-bot și CAPTCHA options
+	StealthMode        bool              `json:"stealth_mode,omitempty"`
+	CaptchaSolver      string            `json:"captcha_solver,omitempty"`      // "2captcha", "anticaptcha", "manual"
+	CaptchaApiKey      string            `json:"captcha_api_key,omitempty"`
+	RandomDelay        bool              `json:"random_delay,omitempty"`
+	MinDelay           int               `json:"min_delay,omitempty"`           // in seconds
+	MaxDelay           int               `json:"max_delay,omitempty"`           // in seconds
+	HumanBehavior      bool              `json:"human_behavior,omitempty"`
+	ViewportWidth      int               `json:"viewport_width,omitempty"`
+	ViewportHeight     int               `json:"viewport_height,omitempty"`
+	DisableImages      bool              `json:"disable_images,omitempty"`
+	DisableCSS         bool              `json:"disable_css,omitempty"`
+	DisableJS          bool              `json:"disable_js,omitempty"`
+	WebGLFingerprint   bool              `json:"webgl_fingerprint,omitempty"`
+	CanvasFingerprint  bool              `json:"canvas_fingerprint,omitempty"`
 }
 
 // ScrapingResult represents the result of a scraping operation
@@ -105,4 +127,147 @@ func (su *StatusUpdate) ToJSON() (string, error) {
 		return "", err
 	}
 	return string(data), nil
+}
+
+// ToHTML converts a ScrapingResult to HTML string
+func (sr *ScrapingResult) ToHTML() (string, error) {
+	html := fmt.Sprintf(`<!DOCTYPE html>
+<html>
+<head>
+    <title>Scraping Result - %s</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .header { background: #f0f0f0; padding: 10px; border-radius: 5px; }
+        .data { margin: 20px 0; }
+        .field { margin: 10px 0; padding: 10px; border-left: 3px solid #007acc; }
+        .field-name { font-weight: bold; color: #007acc; }
+        .field-value { margin-top: 5px; }
+        .error { color: red; }
+        .success { color: green; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Scraping Result</h1>
+        <p><strong>Task ID:</strong> %s</p>
+        <p><strong>URL:</strong> <a href="%s" target="_blank">%s</a></p>
+        <p><strong>Status:</strong> <span class="%s">%s</span></p>
+        <p><strong>Timestamp:</strong> %s</p>
+        <p><strong>Duration:</strong> %dms</p>
+        <p><strong>Cost:</strong> $%.2f</p>`, 
+		sr.TaskID, sr.TaskID, sr.URL, sr.URL, 
+		func() string { if sr.Status == TaskStatusCompleted { return "success" } else { return "error" } }(), 
+		sr.Status, sr.Timestamp.Format("2006-01-02 15:04:05"), sr.Duration, sr.Cost)
+
+	if sr.Error != "" {
+		html += fmt.Sprintf(`<p><strong>Error:</strong> <span class="error">%s</span></p>`, sr.Error)
+	}
+
+	html += `
+    </div>
+    <div class="data">
+        <h2>Extracted Data</h2>`
+
+	for key, value := range sr.Data {
+		html += fmt.Sprintf(`
+        <div class="field">
+            <div class="field-name">%s:</div>
+            <div class="field-value">%v</div>
+        </div>`, key, value)
+	}
+
+	html += `
+    </div>
+</body>
+</html>`
+	
+	return html, nil
+}
+
+// ToMarkdown converts a ScrapingResult to Markdown string
+func (sr *ScrapingResult) ToMarkdown() (string, error) {
+	md := fmt.Sprintf(`# Scraping Result
+
+## Metadata
+- **Task ID:** %s
+- **URL:** [%s](%s)
+- **Status:** %s
+- **Timestamp:** %s
+- **Duration:** %dms
+- **Cost:** $%.2f
+
+`, sr.TaskID, sr.URL, sr.URL, sr.Status, sr.Timestamp.Format("2006-01-02 15:04:05"), 
+   sr.Duration, sr.Cost)
+
+	if sr.Error != "" {
+		md += fmt.Sprintf("- **Error:** %s\n\n", sr.Error)
+	}
+
+	md += "## Extracted Data\n\n"
+
+	for key, value := range sr.Data {
+		md += fmt.Sprintf("### %s\n\n%s\n\n", key, value)
+	}
+
+	return md, nil
+}
+
+// ToXML converts a ScrapingResult to XML string
+func (sr *ScrapingResult) ToXML() (string, error) {
+	xml := fmt.Sprintf(`<?xml version="1.0" encoding="UTF-8"?>
+<scrapingResult>
+    <metadata>
+        <taskId>%s</taskId>
+        <url>%s</url>
+        <status>%s</status>
+        <timestamp>%s</timestamp>
+        <duration>%d</duration>
+        <cost>%.2f</cost>`, 
+    sr.TaskID, sr.URL, sr.Status, sr.Timestamp.Format(time.RFC3339), 
+    sr.Duration, sr.Cost)
+
+	if sr.Error != "" {
+		xml += fmt.Sprintf("\n        <error><![CDATA[%s]]></error>", sr.Error)
+	}
+
+	xml += `
+    </metadata>
+    <data>`
+
+	for key, value := range sr.Data {
+		xml += fmt.Sprintf("\n        <%s><![CDATA[%v]]></%s>", key, value, key)
+	}
+
+	xml += `
+    </data>
+</scrapingResult>`
+	
+	return xml, nil
+}
+
+// ToCSV converts a ScrapingResult to CSV string
+func (sr *ScrapingResult) ToCSV() (string, error) {
+	var csv strings.Builder
+	
+	// Header
+	csv.WriteString("Field,Value\n")
+	
+	// Metadata fields
+	csv.WriteString(fmt.Sprintf("task_id,%s\n", sr.TaskID))
+	csv.WriteString(fmt.Sprintf("url,%s\n", sr.URL))
+	csv.WriteString(fmt.Sprintf("status,%s\n", sr.Status))
+	csv.WriteString(fmt.Sprintf("timestamp,%s\n", sr.Timestamp.Format(time.RFC3339)))
+	csv.WriteString(fmt.Sprintf("duration,%d\n", sr.Duration))
+	csv.WriteString(fmt.Sprintf("cost,%.2f\n", sr.Cost))
+	
+	if sr.Error != "" {
+		csv.WriteString(fmt.Sprintf("error,%s\n", sr.Error))
+	}
+	
+	// Data fields
+	for key, value := range sr.Data {
+		csv.WriteString(fmt.Sprintf("%s,%v\n", key, value))
+	}
+	
+	return csv.String(), nil
 }

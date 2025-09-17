@@ -3,6 +3,7 @@ const logger = require('../config/logger');
 
 const JOBS_TABLE = process.env.DYNAMODB_JOBS_TABLE;
 const PIPELINES_TABLE = process.env.DYNAMODB_PIPELINES_TABLE;
+const DATAFLOW_PIPELINES_TABLE = process.env.DYNAMODB_DATAFLOW_PIPELINES_TABLE || 'dataflow_pipelines';
 
 // Jobs table operations
 const createJob = async (jobData) => {
@@ -289,6 +290,186 @@ const getActivePipelinesForSchedule = async (frequency, limit = 100) => {
   }
 };
 
+// Data Flow Pipelines operations
+const saveDataFlowPipeline = async (pipelineData) => {
+  try {
+    const params = {
+      TableName: DATAFLOW_PIPELINES_TABLE,
+      Item: {
+        pipeline_id: pipelineData.id,
+        user_id: pipelineData.userId,
+        name: pipelineData.name,
+        description: pipelineData.description,
+        template: pipelineData.template,
+        status: pipelineData.status,
+        start_url: pipelineData.startUrl,
+        steps: pipelineData.steps,
+        config: pipelineData.config,
+        created_at: pipelineData.createdAt,
+        updated_at: pipelineData.updatedAt,
+        execution_history: pipelineData.executionHistory || []
+      }
+    };
+
+    await dynamodb.put(params).promise();
+    logger.info('Data flow pipeline saved successfully', { pipelineId: pipelineData.id });
+
+    return { success: true, data: params.Item };
+  } catch (error) {
+    logger.error('Failed to save data flow pipeline', { error: error.message, pipelineData });
+    throw error;
+  }
+};
+
+const getDataFlowPipeline = async (pipelineId, userId) => {
+  try {
+    const params = {
+      TableName: DATAFLOW_PIPELINES_TABLE,
+      Key: {
+        pipeline_id: pipelineId,
+        user_id: userId
+      }
+    };
+
+    const result = await dynamodb.get(params).promise();
+
+    if (!result.Item) {
+      return null;
+    }
+
+    return {
+      id: result.Item.pipeline_id,
+      name: result.Item.name,
+      description: result.Item.description,
+      template: result.Item.template,
+      status: result.Item.status,
+      startUrl: result.Item.start_url,
+      steps: result.Item.steps,
+      config: result.Item.config,
+      userId: result.Item.user_id,
+      createdAt: result.Item.created_at,
+      updatedAt: result.Item.updated_at,
+      executionHistory: result.Item.execution_history || []
+    };
+  } catch (error) {
+    logger.error('Failed to get data flow pipeline', { error: error.message, pipelineId, userId });
+    throw error;
+  }
+};
+
+const getDataFlowPipelines = async (userId, options = {}) => {
+  try {
+    const params = {
+      TableName: DATAFLOW_PIPELINES_TABLE,
+      KeyConditionExpression: 'user_id = :userId',
+      ExpressionAttributeValues: {
+        ':userId': userId
+      },
+      ScanIndexForward: false, // Sort by created_at descending
+      Limit: options.limit || 20
+    };
+
+    // Add filters if provided
+    if (options.status) {
+      params.FilterExpression = '#status = :status';
+      params.ExpressionAttributeNames = { '#status': 'status' };
+      params.ExpressionAttributeValues[':status'] = options.status;
+    }
+
+    if (options.template) {
+      const filterExpr = params.FilterExpression ? `${params.FilterExpression} AND template = :template` : 'template = :template';
+      params.FilterExpression = filterExpr;
+      params.ExpressionAttributeValues[':template'] = options.template;
+    }
+
+    const result = await dynamodb.query(params).promise();
+
+    return result.Items.map(item => ({
+      id: item.pipeline_id,
+      name: item.name,
+      description: item.description,
+      template: item.template,
+      status: item.status,
+      startUrl: item.start_url,
+      steps: item.steps,
+      config: item.config,
+      userId: item.user_id,
+      createdAt: item.created_at,
+      updatedAt: item.updated_at,
+      executionHistory: item.execution_history || []
+    }));
+  } catch (error) {
+    logger.error('Failed to get data flow pipelines', { error: error.message, userId, options });
+    throw error;
+  }
+};
+
+const updateDataFlowPipeline = async (pipelineId, updates) => {
+  try {
+    // Construiește expression-ul de update dinamic
+    const updateExpressions = [];
+    const expressionAttributeNames = {};
+    const expressionAttributeValues = {};
+
+    Object.keys(updates).forEach((key, index) => {
+      if (key === 'id' || key === 'userId') return; // Skip immutable fields
+      
+      const attrName = `#attr${index}`;
+      const attrValue = `:val${index}`;
+      
+      updateExpressions.push(`${attrName} = ${attrValue}`);
+      expressionAttributeNames[attrName] = key === 'startUrl' ? 'start_url' : 
+                                           key === 'createdAt' ? 'created_at' :
+                                           key === 'updatedAt' ? 'updated_at' :
+                                           key === 'executionHistory' ? 'execution_history' : key;
+      expressionAttributeValues[attrValue] = updates[key];
+    });
+
+    if (updateExpressions.length === 0) {
+      return { success: true, message: 'No updates to apply' };
+    }
+
+    const params = {
+      TableName: DATAFLOW_PIPELINES_TABLE,
+      Key: {
+        pipeline_id: pipelineId
+      },
+      UpdateExpression: `SET ${updateExpressions.join(', ')}`,
+      ExpressionAttributeNames: expressionAttributeNames,
+      ExpressionAttributeValues: expressionAttributeValues,
+      ReturnValues: 'ALL_NEW'
+    };
+
+    const result = await dynamodb.update(params).promise();
+    logger.info('Data flow pipeline updated successfully', { pipelineId });
+
+    return { success: true, data: result.Attributes };
+  } catch (error) {
+    logger.error('Failed to update data flow pipeline', { error: error.message, pipelineId, updates });
+    throw error;
+  }
+};
+
+const deleteDataFlowPipeline = async (pipelineId, userId) => {
+  try {
+    const params = {
+      TableName: DATAFLOW_PIPELINES_TABLE,
+      Key: {
+        pipeline_id: pipelineId,
+        user_id: userId
+      }
+    };
+
+    await dynamodb.delete(params).promise();
+    logger.info('Data flow pipeline deleted successfully', { pipelineId, userId });
+
+    return { success: true };
+  } catch (error) {
+    logger.error('Failed to delete data flow pipeline', { error: error.message, pipelineId, userId });
+    throw error;
+  }
+};
+
 module.exports = {
   // Jobs operations
   createJob,
@@ -302,4 +483,11 @@ module.exports = {
   getUserPipelines,
   updatePipelineLastRun,
   getActivePipelinesForSchedule,
+
+  // Data Flow Pipelines operations
+  saveDataFlowPipeline,
+  getDataFlowPipeline,
+  getDataFlowPipelines,
+  updateDataFlowPipeline,
+  deleteDataFlowPipeline,
 };

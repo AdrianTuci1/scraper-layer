@@ -49,6 +49,18 @@ type Config struct {
 	DefaultTimeout    int
 	DefaultUserAgent  string
 	DefaultMaxRetries int
+	
+	// Output Format Configuration
+	DefaultOutputFormat string
+	
+	// Anti-bot Configuration
+	DefaultStealthMode    bool
+	DefaultCaptchaSolver  string
+	DefaultCaptchaApiKey  string
+	DefaultMinDelay       int
+	DefaultMaxDelay       int
+	DefaultViewportWidth  int
+	DefaultViewportHeight int
 }
 
 // LoadConfig loads configuration from environment variables
@@ -74,8 +86,20 @@ func LoadConfig() (*Config, error) {
 		MaxRetries:         getEnvAsInt("MAX_RETRIES", 3),
 		RetryDelay:         getEnvAsDuration("RETRY_DELAY", 5*time.Second),
 		DefaultTimeout:     getEnvAsInt("DEFAULT_TIMEOUT", 30),
-		DefaultUserAgent:   getEnv("DEFAULT_USER_AGENT", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"),
+		DefaultUserAgent:   getEnv("DEFAULT_USER_AGENT", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"),
 		DefaultMaxRetries:  getEnvAsInt("DEFAULT_MAX_RETRIES", 3),
+		
+		// Output format defaults
+		DefaultOutputFormat: getEnv("DEFAULT_OUTPUT_FORMAT", "json"),
+		
+		// Anti-bot defaults
+		DefaultStealthMode:    getEnvAsBool("DEFAULT_STEALTH_MODE", true),
+		DefaultCaptchaSolver:  getEnv("DEFAULT_CAPTCHA_SOLVER", ""),
+		DefaultCaptchaApiKey:  getEnv("DEFAULT_CAPTCHA_API_KEY", ""),
+		DefaultMinDelay:       getEnvAsInt("DEFAULT_MIN_DELAY", 1),
+		DefaultMaxDelay:       getEnvAsInt("DEFAULT_MAX_DELAY", 3),
+		DefaultViewportWidth:  getEnvAsInt("DEFAULT_VIEWPORT_WIDTH", 1920),
+		DefaultViewportHeight: getEnvAsInt("DEFAULT_VIEWPORT_HEIGHT", 1080),
 	}
 
 	// Parse proxy list

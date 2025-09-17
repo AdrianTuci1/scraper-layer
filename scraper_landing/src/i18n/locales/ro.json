@@ -3,7 +3,7 @@
     "home": "Acasă",
     "pricing": "Prețuri",
     "documentation": "Documentație",
-    "about": "Despre Noi",
+    "resources": "Resurse",
     "login": "Autentificare",
     "getStarted": "Începe Gratuit"
   },
@@ -233,66 +233,113 @@
       }
     ]
   },
-  "about": {
-    "title": "Despre Noi",
-    "subtitle": "Suntem o echipă de dezvoltatori pasionați care vrem să democratizăm accesul la datele web.",
-    "story": {
-      "title": "Povestea Noastră",
-      "description1": "Totul a început când am încercat să construim un sistem de monitorizare prețuri pentru un client. Am realizat rapid că scraping-ul web este o provocare tehnică complexă care necesită resurse substanțiale și cunoștințe specializate.",
-      "description2": "Am văzut că multe companii se confruntă cu aceleași probleme: IP-uri blocate, sisteme care nu scalează, mentenanță constantă. Am decis să construim o soluție care să rezolve toate aceste probleme într-un singur API simplu și puternic."
-    },
-    "vision": {
-      "title": "Viziunea Noastră",
-      "description": "Vrem ca orice dezvoltator sau companie să poată accesa datele web de care are nevoie, fără să se îngrijoreze de complexitatea tehnică din spate. Datele web ar trebui să fie la fel de ușor de accesat ca orice alt API."
-    },
-    "values": {
-      "title": "Valorile Noastre",
+  "resources": {
+    "title": "Resurse",
+    "subtitle": "Tot ce ai nevoie pentru a începe cu ScraperLayer API și pentru a profita la maximum de platforma noastră.",
+    "comparisons": {
+      "title": "Comparații API",
+      "readMore": "Citește mai mult",
       "items": [
         {
-          "title": "Simplitate",
-          "description": "Credem că tehnologia complexă trebuie să fie simplă de folosit. API-ul nostru este intuitiv și bine documentat."
+          "title": "ScraperLayer vs ScrapingBee",
+          "description": "Compară funcționalitățile, prețurile și performanța noastră cu ScrapingBee",
+          "features": [
+            "Prețuri mai bune per cerere",
+            "Infrastructură mai fiabilă",
+            "Rendering JavaScript avansat",
+            "Documentație și suport mai bun"
+          ],
+          "link": "/comparisons/scrapingbee"
         },
         {
-          "title": "Fiabilitate",
-          "description": "Infrastructura noastră este construită pentru a funcționa 24/7. Uptime de 99.9%+ și suport dedicat."
-        },
-        {
-          "title": "Scalabilitate",
-          "description": "Sistemul nostru crește odată cu nevoile tale. De la teste mici la milioane de cereri zilnic."
-        },
-        {
-          "title": "Transparență",
-          "description": "Prețuri clare, documentație completă și comunicare deschisă. Fără surprize, fără costuri ascunse."
+          "title": "ScraperLayer vs Apify",
+          "description": "Vezi cum ne comparăm cu soluțiile de scraping Apify",
+          "features": [
+            "Integrare API mai simplă",
+            "Nu necesită configurare complexă",
+            "Performanță mai bună pentru scraping simplu",
+            "Mai rentabil pentru majoritatea cazurilor"
+          ],
+          "link": "/comparisons/apify"
         }
       ]
     },
-    "team": {
-      "title": "Echipa Noastră",
-      "members": [
+    "developerGuide": {
+      "title": "Ghid pentru Dezvoltatori",
+      "readGuide": "Citește Ghidul",
+      "sections": [
         {
-          "name": "Alexandru Popescu",
-          "role": "CEO & Founder",
-          "description": "10+ ani experiență în dezvoltare web și arhitectură cloud. A condus echipe la companii tech din România și străinătate.",
-          "image": "👨‍💼"
+          "title": "Primii Pași",
+          "description": "Învață elementele de bază ale API-ului nostru și fă prima ta cerere",
+          "link": "/docs/getting-started",
+          "icon": "🚀"
         },
         {
-          "name": "Maria Ionescu",
-          "role": "CTO",
-          "description": "Expert în sisteme distribuite și microservicii. A lucrat la scale-up-uri din Silicon Valley și aduce experiența internațională.",
-          "image": "👩‍💻"
+          "title": "Autentificare",
+          "description": "Înțelege cum să autentifici și să securizezi apelurile API",
+          "link": "/docs/authentication",
+          "icon": "🔐"
         },
         {
-          "name": "Andrei Dumitrescu",
-          "role": "Lead Developer",
-          "description": "Specialist în Go și arhitecturi high-performance. A dezvoltat sisteme care procesează milioane de cereri zilnic.",
-          "image": "👨‍🔧"
+          "title": "Limite de Rata",
+          "description": "Învață despre limitarea ratei și cum să optimizezi cererile",
+          "link": "/docs/rate-limits",
+          "icon": "⚡"
+        },
+        {
+          "title": "Gestionarea Erorilor",
+          "description": "Bunele practici pentru gestionarea erorilor și retry-uri",
+          "link": "/docs/error-handling",
+          "icon": "⚠️"
+        },
+        {
+          "title": "Webhooks",
+          "description": "Configurează webhooks pentru notificări în timp real",
+          "link": "/docs/webhooks",
+          "icon": "🔔"
+        },
+        {
+          "title": "SDK-uri și Biblioteci",
+          "description": "Folosește SDK-urile noastre oficiale pentru limbajele de programare populare",
+          "link": "/docs/sdks",
+          "icon": "📚"
+        }
+      ]
+    },
+    "faqs": {
+      "title": "Întrebări Frecvente",
+      "items": [
+        {
+          "question": "Care este diferența dintre ScraperLayer și alte servicii de scraping?",
+          "answer": "ScraperLayer oferă prețuri mai bune, infrastructură mai fiabilă și integrare mai simplă comparativ cu alte servicii. Ne concentrăm pe simplificarea scraping-ului web menținând performanța și fiabilitatea înaltă."
+        },
+        {
+          "question": "Suportați rendering JavaScript?",
+          "answer": "Da, suportăm rendering complet JavaScript pentru website-uri dinamice. Infrastructura noastră poate gestiona SPA-uri complexe și website-uri care necesită JavaScript pentru a încărca conținutul."
+        },
+        {
+          "question": "Care sunt limitele voastre de rată?",
+          "answer": "Limitele de rată depind de planul tău. Planul gratuit permite 100 de cereri pe lună, planul Pro permite 10.000 de cereri pe lună, iar planul Business are limite personalizate în funcție de nevoile tale."
+        },
+        {
+          "question": "Cum gestionați blocarea IP-urilor?",
+          "answer": "Folosim o rețea distribuită de IP-uri și rotație automată pentru a evita blocarea. Sistemul nostru include și distribuție geografică și mecanisme inteligente de retry."
+        },
+        {
+          "question": "Pot să scapez orice website?",
+          "answer": "Putem scapa majoritatea website-urilor publice, dar respectăm fișierele robots.txt și limitele de rată. Nu suportăm scraping-ul conținutului privat sau protejat cu parolă."
+        },
+        {
+          "question": "Ce formate de date suportați?",
+          "answer": "Returnăm datele în format JSON implicit, dar suportăm și exporturi CSV și XML. Poți specifica formatul în cererea ta API."
         }
       ]
     },
     "cta": {
-      "title": "Vrei să lucrezi cu noi?",
-      "subtitle": "Cautăm dezvoltatori pasionați care vor să construiască viitorul datelor web.",
-      "button": "Vezi pozițiile disponibile"
+      "title": "Gata să începi?",
+      "subtitle": "Alătură-te miilor de dezvoltatori care se încred în ScraperLayer pentru nevoile lor de scraping web.",
+      "documentation": "Vezi Documentația",
+      "pricing": "Vezi Prețurile"
     }
   },
   "footer": {

@@ -16,10 +16,10 @@ export function UseCases() {
     <section className="py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+          <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
             {t('useCases.title')}
           </h2>
-          <p className="mt-6 text-lg leading-8 text-gray-600">
+          <p className="mt-6 text-lg leading-8 text-gray-300">
             {t('useCases.subtitle')}
           </p>
         </div>
@@ -31,7 +31,7 @@ export function UseCases() {
                 <CardHeader>
                   <div className="text-4xl mb-4">{useCase.icon}</div>
                   <CardTitle className="text-2xl">{useCase.title}</CardTitle>
-                  <CardDescription className="text-lg font-medium text-blue-600">
+                  <CardDescription className="text-lg font-medium text-blue-400">
                     {useCase.subtitle}
                   </CardDescription>
                   <CardDescription className="text-base">

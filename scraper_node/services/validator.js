@@ -8,12 +8,42 @@ const createJobSchema = Joi.object({
     'any.required': 'URL is required',
   }),
   options: Joi.object({
+    // Legacy options
     selector: Joi.string().optional(),
     schema: Joi.object().optional(),
     waitTime: Joi.number().min(0).max(30).optional(),
     userAgent: Joi.string().optional(),
     headers: Joi.object().optional(),
     proxy: Joi.string().uri().optional(),
+    
+    // New Go server compatible options
+    timeout: Joi.number().min(1).max(300).optional(), // in seconds
+    enableJS: Joi.boolean().optional(),
+    waitForElement: Joi.string().optional(),
+    proxyURL: Joi.string().uri().optional(),
+    maxRetries: Joi.number().min(0).max(10).optional(),
+    retryDelay: Joi.number().min(1).max(60).optional(), // in seconds
+    respectRobots: Joi.boolean().optional(),
+    
+    // Output format options
+    outputFormat: Joi.string().valid('json', 'html', 'xml', 'md', 'csv').optional(),
+    template: Joi.string().optional(),
+    
+    // Anti-bot and CAPTCHA options
+    stealthMode: Joi.boolean().optional(),
+    captchaSolver: Joi.string().valid('2captcha', 'anticaptcha', 'manual').optional(),
+    captchaApiKey: Joi.string().optional(),
+    randomDelay: Joi.boolean().optional(),
+    minDelay: Joi.number().min(1).max(30).optional(), // in seconds
+    maxDelay: Joi.number().min(1).max(30).optional(), // in seconds
+    humanBehavior: Joi.boolean().optional(),
+    viewportWidth: Joi.number().min(320).max(3840).optional(),
+    viewportHeight: Joi.number().min(240).max(2160).optional(),
+    disableImages: Joi.boolean().optional(),
+    disableCSS: Joi.boolean().optional(),
+    disableJS: Joi.boolean().optional(),
+    webGLFingerprint: Joi.boolean().optional(),
+    canvasFingerprint: Joi.boolean().optional(),
   }).optional(),
   callbackUrl: Joi.string().uri().optional().messages({
     'string.uri': 'callbackUrl must be a valid URI',
@@ -37,12 +67,42 @@ const createPipelineSchema = Joi.object({
     'any.required': 'Frequency is required',
   }),
   options: Joi.object({
+    // Legacy options
     selector: Joi.string().optional(),
     schema: Joi.object().optional(),
     waitTime: Joi.number().min(0).max(30).optional(),
     userAgent: Joi.string().optional(),
     headers: Joi.object().optional(),
     proxy: Joi.string().uri().optional(),
+    
+    // New Go server compatible options
+    timeout: Joi.number().min(1).max(300).optional(),
+    enableJS: Joi.boolean().optional(),
+    waitForElement: Joi.string().optional(),
+    proxyURL: Joi.string().uri().optional(),
+    maxRetries: Joi.number().min(0).max(10).optional(),
+    retryDelay: Joi.number().min(1).max(60).optional(),
+    respectRobots: Joi.boolean().optional(),
+    
+    // Output format options
+    outputFormat: Joi.string().valid('json', 'html', 'xml', 'md', 'csv').optional(),
+    template: Joi.string().optional(),
+    
+    // Anti-bot and CAPTCHA options
+    stealthMode: Joi.boolean().optional(),
+    captchaSolver: Joi.string().valid('2captcha', 'anticaptcha', 'manual').optional(),
+    captchaApiKey: Joi.string().optional(),
+    randomDelay: Joi.boolean().optional(),
+    minDelay: Joi.number().min(1).max(30).optional(),
+    maxDelay: Joi.number().min(1).max(30).optional(),
+    humanBehavior: Joi.boolean().optional(),
+    viewportWidth: Joi.number().min(320).max(3840).optional(),
+    viewportHeight: Joi.number().min(240).max(2160).optional(),
+    disableImages: Joi.boolean().optional(),
+    disableCSS: Joi.boolean().optional(),
+    disableJS: Joi.boolean().optional(),
+    webGLFingerprint: Joi.boolean().optional(),
+    canvasFingerprint: Joi.boolean().optional(),
   }).optional(),
 });
 

@@ -65,10 +65,10 @@ print(result)`
     <div className="py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+          <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
             {t('documentation.title')}
           </h1>
-          <p className="mt-6 text-lg leading-8 text-gray-600">
+          <p className="mt-6 text-lg leading-8 text-gray-300">
             {t('documentation.subtitle')}
           </p>
         </div>
@@ -88,7 +88,7 @@ print(result)`
                         <svg className="h-4 w-4 text-blue-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
                         </svg>
-                        <span className="text-sm text-gray-600">{item}</span>
+                        <span className="text-sm text-gray-300">{item}</span>
                       </li>
                     ))}
                   </ul>
@@ -99,7 +99,7 @@ print(result)`
         </div>
 
         <div className="mx-auto mt-16 max-w-4xl">
-          <h2 className="text-2xl font-bold tracking-tight text-gray-900 text-center mb-8">
+          <h2 className="text-2xl font-bold tracking-tight text-white text-center mb-8">
             {t('documentation.codeExamples')}
           </h2>
           <div className="space-y-6">
@@ -111,7 +111,7 @@ print(result)`
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm">
+                  <pre className="bg-gray-800 text-gray-100 p-4 rounded-lg overflow-x-auto text-sm border border-gray-700">
                     <code>{example.code}</code>
                   </pre>
                 </CardContent>

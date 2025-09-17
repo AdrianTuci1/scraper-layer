@@ -1,0 +1,84 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:PutItem",
+        "dynamodb:GetItem",
+        "dynamodb:UpdateItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:Query",
+        "dynamodb:Scan"
+      ],
+      "Resource": [
+        "arn:aws:dynamodb:*:*:table/dataflow_pipelines",
+        "arn:aws:dynamodb:*:*:table/dataflow_pipelines/*",
+        "arn:aws:dynamodb:*:*:table/dataflow_executions",
+        "arn:aws:dynamodb:*:*:table/dataflow_executions/*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:DeleteObject",
+        "s3:ListBucket"
+      ],
+      "Resource": [
+        "arn:aws:s3:::scraperlayer-airflow-dags",
+        "arn:aws:s3:::scraperlayer-airflow-dags/*",
+        "arn:aws:s3:::scraperlayer-dataflow-results",
+        "arn:aws:s3:::scraperlayer-dataflow-results/*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "sqs:SendMessage",
+        "sqs:ReceiveMessage",
+        "sqs:DeleteMessage",
+        "sqs:GetQueueAttributes"
+      ],
+      "Resource": [
+        "arn:aws:sqs:*:*:dataflow-jobs",
+        "arn:aws:sqs:*:*:dataflow-jobs-dlq"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "airflow:CreateWebLoginToken",
+        "airflow:GetEnvironment",
+        "airflow:ListEnvironments"
+      ],
+      "Resource": [
+        "arn:aws:airflow:*:*:environment/scraperlayer-dataflow"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents",
+        "logs:DescribeLogGroups",
+        "logs:DescribeLogStreams"
+      ],
+      "Resource": [
+        "arn:aws:logs:*:*:log-group:/aws/lambda/dataflow-service*",
+        "arn:aws:logs:*:*:log-group:/aws/mwaa/scraperlayer-dataflow*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "cloudwatch:PutMetricData",
+        "cloudwatch:GetMetricStatistics",
+        "cloudwatch:ListMetrics"
+      ],
+      "Resource": "*"
+    }
+  ]
+}

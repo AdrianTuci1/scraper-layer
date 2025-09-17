@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"math/rand"
 	"net/url"
 	"strings"
 	"time"
@@ -157,7 +158,7 @@ func (se *ScraperEngine) scrapeWithColly(task *models.TaskMessage) (map[string]i
 	return result, nil
 }
 
-// scrapeWithJS performs scraping using Chrome headless (for JS-heavy sites)
+// scrapeWithJS performs scraping using Chrome headless with stealth capabilities
 func (se *ScraperEngine) scrapeWithJS(task *models.TaskMessage) (map[string]interface{}, error) {
 	se.logger.WithField("task_id", task.TaskID).Debug("Using Chrome headless for scraping")
 
@@ -167,34 +168,124 @@ func (se *ScraperEngine) scrapeWithJS(task *models.TaskMessage) (map[string]inte
 		timeout = se.config.DefaultTimeout
 	}
 	
-	ctx, cancel := chromedp.NewContext(
-		chromedp.WithLogf(se.logger.Debugf),
-	)
+	// Chrome options for stealth mode
+	opts := []chromedp.ExecAllocatorOption{
+		chromedp.NoFirstRun,
+		chromedp.NoDefaultBrowserCheck,
+		chromedp.NoSandbox,
+		chromedp.DisableGPU,
+		chromedp.DisableDevShmUsage,
+	}
+	
+	// Stealth mode options
+	if task.Options.StealthMode || se.config.DefaultStealthMode {
+		userAgent := task.Options.UserAgent
+		if userAgent == "" {
+			userAgent = se.config.DefaultUserAgent
+		}
+		
+		viewportWidth := task.Options.ViewportWidth
+		if viewportWidth == 0 {
+			viewportWidth = se.config.DefaultViewportWidth
+		}
+		
+		viewportHeight := task.Options.ViewportHeight
+		if viewportHeight == 0 {
+			viewportHeight = se.config.DefaultViewportHeight
+		}
+		
+		opts = append(opts,
+			chromedp.UserAgent(userAgent),
+			chromedp.WindowSize(viewportWidth, viewportHeight),
+			chromedp.DisableWebSecurity,
+			chromedp.DisableFeatures("VizDisplayCompositor"),
+		)
+		
+		if task.Options.DisableImages {
+			opts = append(opts, chromedp.DisableImages)
+		}
+		
+		if task.Options.DisableCSS {
+			opts = append(opts, chromedp.DisableCSS)
+		}
+	}
+	
+	ctx, cancel := chromedp.NewExecAllocator(context.Background(), opts...)
 	defer cancel()
-
+	
+	ctx, cancel = chromedp.NewContext(ctx, chromedp.WithLogf(se.logger.Debugf))
+	defer cancel()
+	
 	ctx, cancel = context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
 	defer cancel()
 
 	var htmlContent string
 
-	// Set up Chrome options
-	opts := []chromedp.Action{
+	// Set up Chrome actions
+	actions := []chromedp.Action{
 		chromedp.Navigate(task.URL),
 	}
-
+	
+	// Add random delay if enabled
+	if task.Options.RandomDelay {
+		minDelay := task.Options.MinDelay
+		if minDelay == 0 {
+			minDelay = se.config.DefaultMinDelay
+		}
+		maxDelay := task.Options.MaxDelay
+		if maxDelay == 0 {
+			maxDelay = se.config.DefaultMaxDelay
+		}
+		
+		if maxDelay > minDelay {
+			delay := time.Duration(minDelay+rand.Intn(maxDelay-minDelay)) * time.Second
+			actions = append(actions, chromedp.Sleep(delay))
+		}
+	}
+	
+	// Human behavior simulation
+	if task.Options.HumanBehavior {
+		actions = append(actions,
+			chromedp.MouseClick(chromedp.ByQuery, "body", chromedp.ButtonLeft),
+			chromedp.Sleep(500*time.Millisecond),
+			chromedp.ScrollIntoView("body"),
+		)
+	}
+	
 	// Wait for specific element if specified
 	if task.Options.WaitForElement != "" {
-		opts = append(opts, chromedp.WaitVisible(task.Options.WaitForElement))
+		actions = append(actions, chromedp.WaitVisible(task.Options.WaitForElement))
 	} else {
-		// Default wait for page load
-		opts = append(opts, chromedp.WaitVisible("body"))
+		actions = append(actions, chromedp.WaitVisible("body"))
+	}
+	
+	// Check for CAPTCHA
+	var captchaElement string
+	err := chromedp.Run(ctx, chromedp.Query("#captcha, .captcha, [data-captcha], .g-recaptcha", &captchaElement))
+	if err == nil && captchaElement != "" {
+		se.logger.WithField("task_id", task.TaskID).Info("CAPTCHA detected, attempting to solve")
+		
+		// Solve CAPTCHA if solver is configured
+		if task.Options.CaptchaSolver != "" {
+			solution, err := se.solveCaptcha(ctx, task)
+			if err != nil {
+				return nil, fmt.Errorf("failed to solve CAPTCHA: %w", err)
+			}
+			
+			// Submit CAPTCHA solution
+			actions = append(actions, 
+				chromedp.SendKeys("#captcha-input, .captcha-input", solution),
+				chromedp.Click("#captcha-submit, .captcha-submit"),
+				chromedp.WaitVisible(task.Options.WaitForElement),
+			)
+		}
 	}
 
 	// Get the HTML content
-	opts = append(opts, chromedp.OuterHTML("html", &htmlContent))
+	actions = append(actions, chromedp.OuterHTML("html", &htmlContent))
 
 	// Execute the actions
-	err := chromedp.Run(ctx, opts...)
+	err = chromedp.Run(ctx, actions...)
 	if err != nil {
 		return nil, fmt.Errorf("failed to run Chrome: %w", err)
 	}
@@ -368,6 +459,53 @@ func (se *ScraperEngine) applyTransform(text, transform string) string {
 	default:
 		return text
 	}
+}
+
+// solveCaptcha handles CAPTCHA solving using configured service
+func (se *ScraperEngine) solveCaptcha(ctx context.Context, task *models.TaskMessage) (string, error) {
+	// Get CAPTCHA image
+	var imageData []byte
+	err := chromedp.Run(ctx, chromedp.CaptureScreenshot(&imageData))
+	if err != nil {
+		return "", fmt.Errorf("failed to capture screenshot: %w", err)
+	}
+	
+	// Initialize CAPTCHA solver
+	var solver CaptchaSolver
+	captchaSolver := task.Options.CaptchaSolver
+	if captchaSolver == "" {
+		captchaSolver = se.config.DefaultCaptchaSolver
+	}
+	
+	apiKey := task.Options.CaptchaApiKey
+	if apiKey == "" {
+		apiKey = se.config.DefaultCaptchaApiKey
+	}
+	
+	switch captchaSolver {
+	case "2captcha":
+		if apiKey == "" {
+			return "", fmt.Errorf("2captcha API key is required")
+		}
+		solver = NewTwoCaptchaSolver(apiKey)
+	case "anticaptcha":
+		if apiKey == "" {
+			return "", fmt.Errorf("anticaptcha API key is required")
+		}
+		solver = NewAntiCaptchaSolver(apiKey)
+	case "manual":
+		solver = NewManualCaptchaSolver()
+	default:
+		return "", fmt.Errorf("unsupported CAPTCHA solver: %s", captchaSolver)
+	}
+	
+	// Solve CAPTCHA
+	solution, err := solver.SolveCaptcha(imageData, "image")
+	if err != nil {
+		return "", fmt.Errorf("CAPTCHA solving failed: %w", err)
+	}
+	
+	return solution, nil
 }
 
 // getLogLevel converts string log level to logrus level

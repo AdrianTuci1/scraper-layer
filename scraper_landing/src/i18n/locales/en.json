@@ -3,15 +3,15 @@
     "home": "Home",
     "pricing": "Pricing",
     "documentation": "Documentation",
-    "about": "About",
+    "resources": "Resources",
     "login": "Login",
-    "getStarted": "Get Started Free"
+    "getStarted": "Start Trial"
   },
   "hero": {
     "title": "Smart data collection at scale",
     "subtitle": "Transform any website into structured data with our async scraping API. Scalable, fast and reliable for modern businesses.",
-    "getStarted": "Get Started Free",
-    "requestDemo": "Request a Demo"
+    "getStarted": "Contact Us",
+    "requestDemo": "Start Trial"
   },
   "language": {
     "switch": "Switch Language",
@@ -233,66 +233,113 @@
       }
     ]
   },
-  "about": {
-    "title": "About Us",
-    "subtitle": "We are a team of passionate developers who want to democratize access to web data.",
-    "story": {
-      "title": "Our Story",
-      "description1": "It all started when we tried to build a price monitoring system for a client. We quickly realized that web scraping is a complex technical challenge that requires substantial resources and specialized knowledge.",
-      "description2": "We saw that many companies face the same problems: blocked IPs, systems that don't scale, constant maintenance. We decided to build a solution that solves all these problems in one simple and powerful API."
-    },
-    "vision": {
-      "title": "Our Vision",
-      "description": "We want any developer or company to be able to access the web data they need, without worrying about the technical complexity behind it. Web data should be as easy to access as any other API."
-    },
-    "values": {
-      "title": "Our Values",
+  "resources": {
+    "title": "Resources",
+    "subtitle": "Everything you need to get started with ScraperLayer API and make the most of our platform.",
+    "comparisons": {
+      "title": "API Comparisons",
+      "readMore": "Read more",
       "items": [
         {
-          "title": "Simplicity",
-          "description": "We believe complex technology should be simple to use. Our API is intuitive and well documented."
+          "title": "ScraperLayer vs ScrapingBee",
+          "description": "Compare our features, pricing, and performance with ScrapingBee",
+          "features": [
+            "Better pricing per request",
+            "More reliable infrastructure",
+            "Advanced JavaScript rendering",
+            "Better documentation and support"
+          ],
+          "link": "/comparisons/scrapingbee"
         },
         {
-          "title": "Reliability",
-          "description": "Our infrastructure is built to work 24/7. 99.9%+ uptime and dedicated support."
-        },
-        {
-          "title": "Scalability",
-          "description": "Our system grows with your needs. From small tests to millions of daily requests."
-        },
-        {
-          "title": "Transparency",
-          "description": "Clear pricing, complete documentation and open communication. No surprises, no hidden costs."
+          "title": "ScraperLayer vs Apify",
+          "description": "See how we stack up against Apify's scraping solutions",
+          "features": [
+            "Simpler API integration",
+            "No complex setup required",
+            "Better performance for simple scraping",
+            "More cost-effective for most use cases"
+          ],
+          "link": "/comparisons/apify"
         }
       ]
     },
-    "team": {
-      "title": "Our Team",
-      "members": [
+    "developerGuide": {
+      "title": "Developer Guide",
+      "readGuide": "Read Guide",
+      "sections": [
         {
-          "name": "Alexandru Popescu",
-          "role": "CEO & Founder",
-          "description": "10+ years experience in web development and cloud architecture. Led teams at tech companies in Romania and abroad.",
-          "image": "👨‍💼"
+          "title": "Getting Started",
+          "description": "Learn the basics of our API and make your first request",
+          "link": "/docs/getting-started",
+          "icon": "🚀"
         },
         {
-          "name": "Maria Ionescu",
-          "role": "CTO",
-          "description": "Expert in distributed systems and microservices. Worked at Silicon Valley scale-ups and brings international experience.",
-          "image": "👩‍💻"
+          "title": "Authentication",
+          "description": "Understand how to authenticate and secure your API calls",
+          "link": "/docs/authentication",
+          "icon": "🔐"
         },
         {
-          "name": "Andrei Dumitrescu",
-          "role": "Lead Developer",
-          "description": "Go specialist and high-performance architectures. Developed systems that process millions of daily requests.",
-          "image": "👨‍🔧"
+          "title": "Rate Limits",
+          "description": "Learn about rate limiting and how to optimize your requests",
+          "link": "/docs/rate-limits",
+          "icon": "⚡"
+        },
+        {
+          "title": "Error Handling",
+          "description": "Best practices for handling errors and retries",
+          "link": "/docs/error-handling",
+          "icon": "⚠️"
+        },
+        {
+          "title": "Webhooks",
+          "description": "Set up webhooks for real-time notifications",
+          "link": "/docs/webhooks",
+          "icon": "🔔"
+        },
+        {
+          "title": "SDKs & Libraries",
+          "description": "Use our official SDKs for popular programming languages",
+          "link": "/docs/sdks",
+          "icon": "📚"
+        }
+      ]
+    },
+    "faqs": {
+      "title": "Frequently Asked Questions",
+      "items": [
+        {
+          "question": "What is the difference between ScraperLayer and other scraping services?",
+          "answer": "ScraperLayer offers better pricing, more reliable infrastructure, and simpler integration compared to other services. We focus on making web scraping as simple as possible while maintaining high performance and reliability."
+        },
+        {
+          "question": "Do you support JavaScript rendering?",
+          "answer": "Yes, we support full JavaScript rendering for dynamic websites. Our infrastructure can handle complex SPAs and websites that require JavaScript to load content."
+        },
+        {
+          "question": "What are your rate limits?",
+          "answer": "Rate limits depend on your plan. Free tier allows 100 requests per month, Pro plan allows 10,000 requests per month, and Business plan has custom limits based on your needs."
+        },
+        {
+          "question": "How do you handle IP blocking?",
+          "answer": "We use a distributed network of IPs and automatic rotation to avoid blocking. Our system also includes geographic distribution and smart retry mechanisms."
+        },
+        {
+          "question": "Can I scrape any website?",
+          "answer": "We can scrape most public websites, but we respect robots.txt files and rate limits. We don't support scraping of private or password-protected content."
+        },
+        {
+          "question": "What data formats do you support?",
+          "answer": "We return data in JSON format by default, but we also support CSV and XML exports. You can specify the format in your API request."
         }
       ]
     },
     "cta": {
-      "title": "Want to work with us?",
-      "subtitle": "We're looking for passionate developers who want to build the future of web data.",
-      "button": "View available positions"
+      "title": "Ready to get started?",
+      "subtitle": "Join thousands of developers who trust ScraperLayer for their web scraping needs.",
+      "documentation": "View Documentation",
+      "pricing": "See Pricing"
     }
   },
   "footer": {

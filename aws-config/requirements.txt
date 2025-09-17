@@ -1,0 +1,28 @@
+# AWS MWAA Requirements file for DataFlow Studio
+# This file contains Python packages needed by Airflow DAGs
+
+# Core packages
+apache-airflow-providers-http==4.4.2
+apache-airflow-providers-amazon==8.3.0
+requests==2.31.0
+boto3==1.28.25
+botocore==1.31.25
+
+# Data processing
+pandas==2.0.3
+numpy==1.24.3
+beautifulsoup4==4.12.2
+lxml==4.9.3
+
+# Geocoding and maps
+geopy==2.3.0
+googlemaps==4.10.0
+
+# Utilities
+python-dateutil==2.8.2
+pytz==2023.3
+urllib3==1.26.16
+
+# Optional: for advanced data processing
+# scikit-learn==1.3.0
+# matplotlib==3.7.2
