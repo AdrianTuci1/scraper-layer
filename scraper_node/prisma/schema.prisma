@@ -1,0 +1,113 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// Configured for MongoDB/DocumentDB (compatible with Amazon DocumentDB)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Workflow {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId        String
+  name          String
+  description   String?
+  definition    String
+  executionPlan String?
+  creditsCost   Int      @default(0)
+  status        String
+  createdAt     DateTime @default(now())
+  lastRunAt     DateTime?
+  lastRunId     String?
+  lastRunStatus String?
+  updatedAt     DateTime @updatedAt
+  cron          String?
+  nextRunAt     DateTime?
+  executions    WorkflowExecution[]
+
+  @@unique([name, userId])
+  @@map("workflows")
+}
+
+model WorkflowExecution {
+  id                String           @id @default(auto()) @map("_id") @db.ObjectId
+  workflowId        String           @db.ObjectId
+  userId            String
+  trigger           String
+  status            String
+  createdAt         DateTime         @default(now())
+  startedAt         DateTime?
+  completedAt       DateTime?
+  creditsConsumed   Int              @default(0)
+  definition        String           @default("{}")
+  phases            ExecutionPhase[]
+  workflow          Workflow         @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+
+  @@map("workflow_executions")
+}
+
+model ExecutionPhase {
+  id                  String          @id @default(auto()) @map("_id") @db.ObjectId
+  userId              String
+  status              String
+  number              Int
+  node                String
+  name                String
+  startedAt           DateTime?
+  completedAt         DateTime?
+  inputs              String?
+  outputs             String?
+  creditsConsumed     Int?
+  workflowExecutionId String          @db.ObjectId
+
+  execution           WorkflowExecution @relation(fields: [workflowExecutionId], references: [id], onDelete: Cascade)
+  logs                ExecutionLog[]
+
+  @@map("execution_phases")
+}
+
+model ExecutionLog {
+  id               String        @id @default(auto()) @map("_id") @db.ObjectId
+  logLevel         String
+  message          String
+  timestamp        DateTime      @default(now())
+  executionPhaseId String        @db.ObjectId
+  executionPhase   ExecutionPhase @relation(fields: [executionPhaseId], references: [id], onDelete: Cascade)
+
+  @@map("execution_logs")
+}
+
+model UserBalance {
+  userId  String @id @map("_id")
+  credits Int    @default(0)
+
+  @@map("user_balances")
+}
+
+model Credential {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String
+  name      String
+  value     String
+  createdAt DateTime @default(now())
+
+  @@unique([userId, name])
+  @@map("credentials")
+}
+
+model UserPurchase {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String
+  stripeId    String
+  description String
+  amount      Int
+  currency    String
+  date        DateTime @default(now())
+
+  @@map("user_purchases")
+}
+

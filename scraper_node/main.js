@@ -8,6 +8,7 @@ require('dotenv').config();
 
 const logger = require('./config/logger');
 const { authenticateRequest } = require('./utils/auth');
+const { clerkAuthMiddleware, requireAuth } = require('./middleware/clerk');
 
 // Import route handlers
 const jobsRoutes = require('./routes/jobs');
@@ -15,6 +16,11 @@ const pipelinesRoutes = require('./routes/pipelines');
 const dataflowRoutes = require('./routes/dataflow');
 const downloadRoutes = require('./routes/download');
 const callbackRoutes = require('./routes/callback');
+const workflowsRoutes = require('./routes/workflows');
+const workflowsCronRoutes = require('./routes/workflowsCron');
+const credentialsRoutes = require('./routes/credentials');
+const billingRoutes = require('./routes/billing');
+const webhooksRoutes = require('./routes/webhooks');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -50,9 +56,16 @@ const limiter = rateLimit({
 
 app.use(limiter);
 
-// Body parsing middleware
+// Webhook routes (must be BEFORE body parsing middleware)
+// Stripe webhook needs raw body for signature verification
+app.use('/api/v1/webhooks/stripe', express.raw({ type: 'application/json' }), webhooksRoutes);
+
+// Body parsing middleware (for JSON routes)
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// Clerk authentication middleware
+app.use(clerkAuthMiddleware);
 
 // Compression middleware
 app.use(compression());
@@ -100,6 +113,35 @@ app.get('/api', (req, res) => {
         'POST /api/v1/dataflow/pipelines/:id/execute': 'Execute data flow pipeline',
         'GET /api/v1/dataflow/templates': 'Get available templates',
       },
+      workflows: {
+        'GET /api/v1/workflows': 'List user workflows',
+        'GET /api/v1/workflows/:id': 'Get workflow details',
+        'POST /api/v1/workflows': 'Create new workflow',
+        'PUT /api/v1/workflows/:id': 'Update workflow',
+        'DELETE /api/v1/workflows/:id': 'Delete workflow',
+        'POST /api/v1/workflows/:id/publish': 'Publish workflow',
+        'POST /api/v1/workflows/:id/unpublish': 'Unpublish workflow',
+        'PUT /api/v1/workflows/:id/cron': 'Update workflow schedule',
+        'DELETE /api/v1/workflows/:id/cron': 'Remove workflow schedule',
+        'POST /api/v1/workflows/:id/duplicate': 'Duplicate workflow',
+        'GET /api/v1/workflows/:id/executions': 'Get workflow executions',
+      },
+      credentials: {
+        'GET /api/v1/credentials': 'List user credentials',
+        'GET /api/v1/credentials/:id': 'Get credential details',
+        'POST /api/v1/credentials': 'Create new credential',
+        'DELETE /api/v1/credentials/:id': 'Delete credential',
+      },
+      billing: {
+        'GET /api/v1/billing/credits': 'Get available credits',
+        'POST /api/v1/billing/setup': 'Setup user account',
+        'POST /api/v1/billing/purchase': 'Create purchase session',
+        'GET /api/v1/billing/purchases': 'Get user purchases',
+        'GET /api/v1/billing/purchases/:id/invoice': 'Get invoice URL',
+      },
+      webhooks: {
+        'POST /api/v1/webhooks/stripe': 'Stripe webhook endpoint',
+      },
       callback: {
         'POST /api/v1/jobs/:jobId/callback': 'Worker callback endpoint',
       },
@@ -135,7 +177,13 @@ const authenticate = (req, res, next) => {
   next();
 };
 
-// API routes with authentication
+// API routes with Clerk authentication (for workflows, credentials, billing)
+app.use('/api/v1/workflows', workflowsRoutes);
+app.use('/api/v1/workflows', workflowsCronRoutes);
+app.use('/api/v1/credentials', credentialsRoutes);
+app.use('/api/v1/billing', billingRoutes);
+
+// Legacy API routes with API key authentication (for jobs, pipelines, dataflow)
 app.use('/api/v1/jobs', authenticate, jobsRoutes);
 app.use('/api/v1/pipelines', authenticate, pipelinesRoutes);
 app.use('/api/v1/dataflow', authenticate, dataflowRoutes);

@@ -41,6 +41,7 @@ Load Balancer → Express.js Server (EC2) → SQS → Golang Workers
 
 ### Cerințe
 - Node.js 18.x
+- PostgreSQL sau MongoDB/DocumentDB (pentru Prisma)
 - AWS CLI configurat
 - PM2 (pentru production)
 
@@ -52,7 +53,17 @@ npm install
 
 # Configurare variabile de mediu
 cp env.example .env
-# Editează .env cu valorile tale
+# Editează .env cu valorile tale (important: setează DATABASE_URL pentru Prisma)
+# Pentru MongoDB/DocumentDB, vezi ghidul detaliat: MONGODB_SETUP.md
+
+# Generare Prisma Client (necesar după instalare sau modificări în schema)
+npm run prisma:generate
+
+# Pentru PostgreSQL: Rulare migrații de bază de date (prima dată)
+npm run prisma:migrate
+
+# Pentru MongoDB/DocumentDB: Sincronizare schema (migrations nu sunt necesare)
+npm run prisma:dbpush
 ```
 
 ### Pornirea Serverului
@@ -155,6 +166,17 @@ curl -H "X-API-Key: your_api_key" \
 - Toate operațiunile sunt loggate folosind Winston
 - Logurile sunt disponibile în fișiere locale și pot fi redirectate către CloudWatch
 - Rate limiting pentru protecție împotriva abuzurilor
+
+## Note importante
+
+### AWS SDK v2 Warning
+Aplicația folosește momentan AWS SDK v2 (care este în maintenance mode). Aceasta este doar o notificare, nu o eroare - aplicația funcționează perfect. Migrarea la AWS SDK v3 este planificată pentru o versiune viitoare pentru a beneficia de:
+- Bundle size mai mic
+- Performance îmbunătățit
+- API modernizat cu TypeScript support
+- Maintenanță activă
+
+Pentru moment, AWS SDK v2 primește încă security patches și bug fixes critice.
 
 ## Scalabilitate
 

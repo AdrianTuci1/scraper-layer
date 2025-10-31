@@ -93,6 +93,78 @@ const authenticateRequest = (event) => {
   }
 };
 
+// Extract API key from Express request
+const extractApiKeyFromRequest = (req) => {
+  // Try to get from headers first
+  if (req.headers && req.headers['x-api-key']) {
+    return req.headers['x-api-key'];
+  }
+  
+  // Try from Authorization header (Bearer token format)
+  if (req.headers && req.headers.authorization) {
+    const authHeader = req.headers.authorization;
+    if (authHeader.startsWith('Bearer ')) {
+      return authHeader.substring(7);
+    }
+    return authHeader;
+  }
+  
+  // Try from query parameters (for testing purposes)
+  if (req.query && req.query.apiKey) {
+    return req.query.apiKey;
+  }
+  
+  return null;
+};
+
+// Express middleware for API key authentication
+const validateApiKeyMiddleware = (req, res, next) => {
+  try {
+    const apiKey = extractApiKeyFromRequest(req);
+    
+    if (!apiKey) {
+      return res.status(401).json({
+        success: false,
+        error: 'API key is required',
+      });
+    }
+    
+    const validation = validateApiKey(apiKey);
+    
+    if (!validation.isValid) {
+      return res.status(401).json({
+        success: false,
+        error: validation.error || 'Invalid API key',
+      });
+    }
+    
+    const userId = extractUserIdFromApiKey(apiKey);
+    
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        error: 'Invalid user ID from API key',
+      });
+    }
+    
+    // Add user to request object
+    req.user = {
+      id: userId,
+      apiKey: apiKey,
+    };
+    
+    logger.debug('Request authenticated successfully', { userId });
+    
+    next();
+  } catch (error) {
+    logger.error('Authentication error', { error: error.message });
+    return res.status(500).json({
+      success: false,
+      error: 'Authentication failed',
+    });
+  }
+};
+
 // Middleware function for Lambda handlers
 const withAuth = (handler) => {
   return async (event, context, callback) => {
@@ -118,4 +190,5 @@ module.exports = {
   extractUserIdFromApiKey,
   authenticateRequest,
   withAuth,
+  validateApiKey: validateApiKeyMiddleware, // Export as validateApiKey for Express middleware
 };

@@ -19,7 +19,11 @@
     "pm2:restart": "pm2 restart scraper-api",
     "pm2:logs": "pm2 logs scraper-api",
     "pm2:monit": "pm2 monit",
-    "deploy": "echo 'Deploy to EC2 using PM2 or your preferred method'"
+    "deploy": "echo 'Deploy to EC2 using PM2 or your preferred method'",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:dbpush": "prisma db push",
+    "prisma:studio": "prisma studio"
   },
   "dependencies": {
     "express": "^4.18.2",
@@ -33,7 +37,17 @@
     "joi": "^17.11.0",
     "uuid": "^9.0.1",
     "moment": "^2.29.4",
-    "dotenv": "^16.3.1"
+    "dotenv": "^16.3.1",
+    "@clerk/express": "^1.0.0",
+    "@prisma/client": "^5.22.0",
+    "prisma": "^5.22.0",
+    "zod": "^3.23.8",
+    "stripe": "^17.3.1",
+    "cron-parser": "^4.9.0",
+    "puppeteer": "^23.7.1",
+    "cheerio": "^1.0.0",
+    "openai": "^4.72.0",
+    "axios": "^1.7.7"
   },
   "devDependencies": {
     "nodemon": "^3.0.2",
