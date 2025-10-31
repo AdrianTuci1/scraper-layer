@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE "UserPurchase" ALTER COLUMN "date" SET DEFAULT CURRENT_TIMESTAMP;

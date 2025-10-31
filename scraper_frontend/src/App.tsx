@@ -1,26 +1,26 @@
 import { ClerkProvider } from '@clerk/clerk-react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AppProviders } from './components/providers/AppProviders';
-import { Toaster } from './components/ui/sonner';
+import { AppProviders } from './components/providers/AppProviders.tsx';
+import { Toaster } from './components/ui/sonner.tsx';
 import { SignedIn, SignedOut, RedirectToSignIn } from '@clerk/clerk-react';
 import './index.css';
 
 // Pages
-import SignInPage from './pages/SignInPage';
-import SignUpPage from './pages/SignUpPage';
-import DashboardLayout from './pages/DashboardLayout';
-import HomeLandingPage from './pages/landing/page';
+import SignInPage from './pages/SignInPage.tsx';
+import SignUpPage from './pages/SignUpPage.tsx';
+import DashboardLayout from './pages/DashboardLayout.tsx';
+import HomeLandingPage from './pages/landing/page.tsx';
 
 // Dashboard Pages
-import WorkflowsPage from './pages/dashboard/workflows/page';
+import WorkflowsPage from './pages/dashboard/workflows/page.tsx';
 import HomePage from './pages/dashboard/home/page.tsx';
-import BillingPage from './pages/dashboard/billing/page';
-import CredentialsPage from './pages/dashboard/credentials/page';
+import BillingPage from './pages/dashboard/billing/page.tsx';
+import CredentialsPage from './pages/dashboard/credentials/page.tsx';
 
 // Workflow Pages
-import EditorPage from './pages/workflow/_components/Editor';
-import ExecutionsPage from './pages/workflow/runs/[workflowId]/page';
-import ExecutionViewerPage from './pages/workflow/runs/[workflowId]/[executionId]/page';
+import EditorPage from './pages/workflow/_components/Editor.tsx';
+import ExecutionsPage from './pages/workflow/runs/[workflowId]/page.tsx';
+import ExecutionViewerPage from './pages/workflow/runs/[workflowId]/[executionId]/page.tsx';
 
 // Protected Route Component
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
