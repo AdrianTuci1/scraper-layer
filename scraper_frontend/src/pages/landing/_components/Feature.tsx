@@ -69,8 +69,8 @@ export function FeaturesSection() {
       title: "Deliver via webhook",
       description:
         "Sends the scraped data to an external API endpoint through a POST request for further processing or storage.",
-      icon: <SendIcon className="stroke-blue-400" />,
-      hoverChipClassName: "group-hover/feature:bg-blue-500",
+      icon: <SendIcon className="stroke-purple-400" />,
+      hoverChipClassName: "group-hover/feature:bg-purple-500",
     },
     {
       title: "Extract data via AI",
@@ -149,7 +149,7 @@ const Feature = ({
       <div className="text-lg font-bold mb-2 relative z-10 px-10">
         <div
           className={cn(
-            "absolute left-0 inset-y-0 h-6 group-hover/feature:h-8 w-1 rounded-tr-full rounded-br-full bg-neutral-300 dark:bg-neutral-700 group-hover/feature:bg-blue-500 transition-all duration-200 origin-center",
+            "absolute left-0 inset-y-0 h-6 group-hover/feature:h-8 w-1 rounded-tr-full rounded-br-full bg-neutral-300 dark:bg-neutral-700 group-hover/feature:bg-purple-500 transition-all duration-200 origin-center",
             hoverChipClassName
           )}
         />

@@ -1,11 +1,9 @@
 import { cn } from '@/lib/utils';
-import { SquareDashedMousePointer } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { Fragment } from 'react';
 
 function Logo({
   fontSize = '2xl',
-  iconSize = 20,
+  iconSize = 32,
 }: {
   fontSize?: string;
   iconSize?: number;
@@ -18,11 +16,14 @@ function Logo({
       )}
       to="/"
     >
-      <div className="rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 p-2">
-        <SquareDashedMousePointer size={iconSize} className="stroke-white" />
-      </div>
+      <img 
+        src="/Document.png" 
+        alt="Scraperlayer Logo" 
+        className="h-8 w-8"
+        style={{ height: `${iconSize}px`, width: `${iconSize}px` }}
+      />
       <div>
-        <span className="bg-gradient-to-r from-emerald-500 to-emerald-600 bg-clip-text text-transparent">
+        <span className="bg-gradient-to-r from-purple-600 to-purple-700 bg-clip-text text-transparent">
           Flow
         </span>
         <span className="text-stone-700 dark:text-stone-300">Scrape</span>

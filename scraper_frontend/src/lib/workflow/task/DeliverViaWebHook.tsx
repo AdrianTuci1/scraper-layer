@@ -7,7 +7,7 @@ export const DeliverViaWebHookTask = {
   type: TaskType.DELIVER_VIA_WEBHOOK,
   label: "Deliver via Webhook",
   icon: (props: LucideProps) => (
-    <SendIcon className="stroke-blue-400" {...props} />
+    <SendIcon className="stroke-purple-400" {...props} />
   ),
   isEntryPoint: false,
   inputs: [

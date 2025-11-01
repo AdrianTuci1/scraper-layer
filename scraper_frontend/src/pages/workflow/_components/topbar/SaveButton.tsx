@@ -37,7 +37,7 @@ function SaveButton({ workflowId }: { workflowId: string }) {
       onClick={handleSave}
       disabled={isUpdating}
     >
-      <CheckIcon size={16} className="stroke-green-400" />
+      <CheckIcon size={16} className="stroke-purple-600" />
       Save
     </Button>
   );

@@ -12,7 +12,10 @@ import MobileSidebar from './MobileSidebar';
 function BreadcrumbHeader() {
   const location = useLocation();
   const pathname = location.pathname;
-  const paths = pathname === '/' ? [''] : pathname?.split('/');
+  // Filter out empty strings and 'dashboard' prefix
+  const paths = pathname === '/' 
+    ? [] 
+    : pathname?.split('/').filter(Boolean).filter(path => path !== 'dashboard');
 
   return (
     <div className="flex items-center flex-start">
@@ -20,10 +23,10 @@ function BreadcrumbHeader() {
       <Breadcrumb>
         <BreadcrumbList>
           {paths.map((path, index) => (
-            <Fragment key={path}>
+            <Fragment key={`${path}-${index}`}>
               <BreadcrumbItem>
-                <BreadcrumbLink className="capitalize" href={`/${path}`}>
-                  {path === '' ? 'Home' : path}
+                <BreadcrumbLink className="capitalize" href={`/dashboard/${paths.slice(0, index + 1).join('/')}`}>
+                  {path}
                 </BreadcrumbLink>
               </BreadcrumbItem>
               {index !== paths.length - 1 && <BreadcrumbSeparator />}

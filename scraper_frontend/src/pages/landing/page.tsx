@@ -1,6 +1,5 @@
-import { TypewriterEffectSmooth } from '@/components/accernity-ui/TypeWriterEffect';
 import { Button } from '@/components/ui/button';
-import { pricingPlans, typeWriterWords } from '@/lib/data';
+import { pricingPlans } from '@/lib/data';
 import { cn } from '@/lib/utils';
 import { ChevronRightIcon } from 'lucide-react';
 import { FeaturesSection } from './_components/Feature';
@@ -21,11 +20,17 @@ export default function HomeLandingPage() {
   return (
     <div className="flex flex-col min-h-screen gap-4 selection:bg-primary selection:text-white dark bg-[#0C0A09] ">
       <Navbar />
-      <SectionWrapper className="h-[35rem] text-center">
-        <TypewriterEffectSmooth
-          words={typeWriterWords}
-          className="mb-0 space-y-0"
-          cursorClassName="bg-primary"
+      <SectionWrapper className="text-center pt-20 md:pt-32">
+        <h1 className="text-4xl md:text-4xl lg:text-6xl font-bold mb-2">
+          Get data from web pages <br /> with a magic touch.
+        </h1>
+        <h2 className="text-l md:text-xl lg:text-2xl text-muted-foreground mb-8">
+          Easy to use headless scraping
+        </h2>
+        <img
+          src="/flow.png"
+          alt="Flow diagram"
+          className="mx-auto max-w-full h-auto mb-8"
         />
         <p className="text-muted-foreground text-sm md:text-xl">
           Create, automate, and scale your web scraping projects with ease. No
@@ -74,7 +79,7 @@ export default function HomeLandingPage() {
       </SectionWrapper>
 
       <SectionWrapper className="text-center">
-        <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-[#22C55E] to-green-600">
+        <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-purple-800">
           Start Scraping Today
         </h2>
         <p className="mx-auto max-w-[600px] text-gray-500 md:text-xl dark:text-gray-400">
@@ -82,7 +87,7 @@ export default function HomeLandingPage() {
           scraping platform.
         </p>
         <Link
-          className="w-max bg-[#22C55E] text-white hover:bg-[#22C55E]/90 transition-colors flex px-4 py-2 rounded-sm items-center"
+          className="w-max bg-purple-600 text-white hover:bg-purple-700 transition-colors flex px-4 py-2 rounded-sm items-center"
           to="/sign-in"
         >
           Sign Up Now

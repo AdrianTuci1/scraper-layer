@@ -40,7 +40,7 @@ function PublishButton({ workflowId }: { workflowId: string }) {
       onClick={handlePublish}
       disabled={isPublishing}
     >
-      <UploadIcon size={16} className="stroke-green-400" /> Publish
+      <UploadIcon size={16} className="stroke-purple-600" /> Publish
     </Button>
   );
 }

@@ -18,7 +18,7 @@ function PhaseStatusBadge({ status }: { status: ExecutionPhaseStatus }) {
       return <CircleXIcon size={20} className="stroke-destructive" />;
 
     case ExecutionPhaseStatus.COMPLETED:
-      return <CircleCheckIcon size={20} className="stroke-green-500" />;
+      return <CircleCheckIcon size={20} className="stroke-purple-600" />;
 
     default:
       return <div className="rounded-full">{status}</div>;

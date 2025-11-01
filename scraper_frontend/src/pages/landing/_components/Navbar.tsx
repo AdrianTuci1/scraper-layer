@@ -89,8 +89,8 @@ function Navbar() {
   return (
     <header className="px-4 lg:px-6 h-14 flex items-center max-w-screen-xl mx-auto w-full text-primary py-10 sticky top-0 backdrop-blur-sm z-50">
       <Link className="flex items-center justify-center" to={isSignedIn ? "/dashboard" : "#"}>
-        <ZapIcon className="h-8 w-8" />
-        <span className="ml-2 text-white">Flow Scrape</span>
+        <img src="/Document.png" alt="Flow Scrape" className="h-8 w-8" />
+        <span className="text-2xl font-bold">Scraperlayer</span>
       </Link>
       <nav className="ml-auto flex gap-4 sm:gap-6 items-center">
         {routes.map((route) =>
