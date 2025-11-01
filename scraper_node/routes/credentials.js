@@ -136,7 +136,11 @@ router.post('/', requireAuth, async (req, res) => {
       },
     });
   } catch (error) {
-    logger.error('Error creating credential', { error: error.message });
+    logger.error('Error creating credential', { 
+      error: error.message,
+      stack: error.stack,
+      code: error.code,
+    });
     
     if (error.code === 'P2002') {
       return res.status(409).json({
@@ -148,11 +152,24 @@ router.post('/', requireAuth, async (req, res) => {
       });
     }
 
+    // Check if it's an encryption key error
+    if (error.message.includes('Encryption key')) {
+      logger.error('Encryption key error - check ENCRYPTION_KEY environment variable');
+      return res.status(500).json({
+        success: false,
+        error: {
+          message: 'Server configuration error: Encryption key not configured',
+          statusCode: 500,
+        },
+      });
+    }
+
     res.status(500).json({
       success: false,
       error: {
         message: 'Failed to create credential',
         statusCode: 500,
+        details: process.env.NODE_ENV === 'development' ? error.message : undefined,
       },
     });
   }

@@ -15,7 +15,7 @@ function RunButton({ workflowId }: { workflowId: string }) {
         toast.loading('Scheduling run...', { id: workflowId });
         execute(
           {
-            workflowId,
+            id: workflowId,
           },
           {
             onSuccess: () => {

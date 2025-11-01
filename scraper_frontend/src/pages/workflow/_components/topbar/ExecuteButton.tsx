@@ -3,7 +3,6 @@ import { Button } from '@/components/ui/button';
 import useExecutionPlan from '@/hooks/useExecutionPlan';
 import { useReactFlow } from '@xyflow/react';
 import { PlayIcon } from 'lucide-react';
-import React from 'react';
 import { toast } from 'sonner';
 
 function ExecuteButton({ workflowId }: { workflowId: string }) {
@@ -17,7 +16,7 @@ function ExecuteButton({ workflowId }: { workflowId: string }) {
     toast.loading('Starting execution...', { id: 'flow-execution' });
     execute(
       {
-        workflowId,
+        id: workflowId,
         flowDefinition: JSON.stringify(toObject()),
       },
       {

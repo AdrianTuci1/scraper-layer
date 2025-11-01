@@ -19,7 +19,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Layers2Icon, Loader2 } from "lucide-react";
 import { useCallback, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, type ControllerRenderProps } from "react-hook-form";
 import { toast } from "sonner";
 import { useAuth } from "@clerk/clerk-react";
 
@@ -29,7 +29,11 @@ function CreateCredentialDialog({ triggeredText }: { triggeredText?: string }) {
 
   const form = useForm<createCredentialSchemaType>({
     resolver: zodResolver(createCredentialSchema),
-    defaultValues: {},
+    defaultValues: {
+      name: "",
+      value: "",
+    },
+    mode: "onChange",
   });
   const { getToken } = useAuth();
   const { mutate, isPending } = useMutation({
@@ -42,7 +46,10 @@ function CreateCredentialDialog({ triggeredText }: { triggeredText?: string }) {
       toast.success("Credential created", { id: "create-credential" });
       queryClient.invalidateQueries({ queryKey: ["credentials"] });
       setOpen(false);
-      form.reset();
+      form.reset({
+        name: "",
+        value: "",
+      });
     },
     onError: () => {
       toast.error("Failed to create credential", { id: "create-credential" });
@@ -61,8 +68,13 @@ function CreateCredentialDialog({ triggeredText }: { triggeredText?: string }) {
     <Dialog
       open={open}
       onOpenChange={(open) => {
-        form.reset();
         setOpen(open);
+        if (!open) {
+          form.reset({
+            name: "",
+            value: "",
+          });
+        }
       }}
     >
       <DialogTrigger asChild>
@@ -79,7 +91,7 @@ function CreateCredentialDialog({ triggeredText }: { triggeredText?: string }) {
               <FormField
                 control={form.control}
                 name="name"
-                render={({ field }) => (
+                render={({ field }: { field: ControllerRenderProps<createCredentialSchemaType, "name"> }) => (
                   <FormItem>
                     <FormLabel className="flex gap-1 items-center">
                       Name <p className="text-xs text-primary">(required)</p>
@@ -98,7 +110,7 @@ function CreateCredentialDialog({ triggeredText }: { triggeredText?: string }) {
               <FormField
                 control={form.control}
                 name="value"
-                render={({ field }) => (
+                render={({ field }: { field: ControllerRenderProps<createCredentialSchemaType, "value"> }) => (
                   <FormItem>
                     <FormLabel className="flex gap-1 items-center">
                       Description{" "}
